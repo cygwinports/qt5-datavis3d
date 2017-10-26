@@ -1,0 +1,46 @@
+inherit qt5-qmake
+
+NAME="qt5-datavis3d"
+VERSION=5.9.2
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Qt C++ application framework (DataVisualization API)"
+DESCRIPTION="Qt is a cross-platform application framework for desktop and
+embedded development. Qt enables programmers to create advanced GUI
+applications once and deploy them to Windows, Mac OS X and Linux without
+rewriting the source code. Companies using Qt can leverage software
+investments made on one platform across many others."
+HOMEPAGE="https://www.qt.io/"
+SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtdatavis3d-opensource-src-${VERSION}.tar.xz"
+SRC_DIR="qtdatavis3d-opensource-src-${VERSION}"
+
+PKG_NAMES="libQt5DataVisualization5 libQt5DataVisualization-devel ${NAME}-doc ${NAME}-examples"
+libQt5DataVisualization5_CONTENTS="
+	usr/bin/cygQt5DataVisualization-5.dll
+	usr/lib/qt5/qml/QtDataVisualization/
+	usr/share/doc/${NAME}/
+"
+libQt5DataVisualization_devel_CONTENTS="
+	usr/include/qt5/QtDataVisualization/
+	usr/lib/cmake/Qt5DataVisualization/
+	usr/lib/libQt5DataVisualization.*
+	usr/lib/pkgconfig/Qt5DataVisualization.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_datavisualization.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_datavisualization_private.pri
+"
+qt5_datavis3d_doc_CATEGORY="Doc"
+qt5_datavis3d_doc_CONTENTS="usr/share/qt5/doc/qtdatavis*"
+qt5_datavis3d_examples_CATEGORY="X11"
+qt5_datavis3d_examples_CONTENTS="usr/lib/qt5/examples/datavisualization/"
+
+src_compile() {
+	cd ${B}
+	cygqmake5 ${S}
+	cygmake
+	cygmake docs
+}
+
+src_install() {
+	cd ${B}
+	qt5_qmake_install install_docs
+}
